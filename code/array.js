@@ -12,6 +12,19 @@ Array.prototype.myFlat = function(level = 1) {
   }
   return deal(this, level)
 }
+Array.prototype.myFlat2 = function(level = 1) {
+  if (typeof level !== 'number' || level <= 0) {
+    return [...this]
+  }
+  let ans = [...this]
+  while (level > 0 && ans.some((item) => Array.isArray(item))) {
+    ans = [].concat(...ans)
+    --level
+  }
+  return ans
+}
+
+
 
 
 Array.myIsArray = function(target) {
@@ -20,5 +33,5 @@ Array.myIsArray = function(target) {
 
 var a = [1,2,[3,[4,[5]]],[6,7,[8]]]
 
-// console.log(a.myFlat(Infinity))
-console.log(Array.myIsArray(a))
+console.log(a.myFlat2(Infinity))
+// console.log(Array.myIsArray(a))
