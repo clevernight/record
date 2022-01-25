@@ -52,6 +52,10 @@ class MyPromise {
     }
   }
 
+  abort(reason) {
+    this._reject(`abort:: reason:${reason}`)
+  }
+
   then(onfulfilled, onrejected) {
     if (typeof onfulfilled !== 'function') {
       onfulfilled = value => value
@@ -104,7 +108,7 @@ class MyPromise {
     if (x !== null && (x instanceof MyPromise)) {
       //函数或对象
       try {
-        x.then.call(x, res => MyPromise.resolvePromise(promise2, y, resolve, reject), err => reject(err))
+        x.then.call(x, res => MyPromise.resolvePromise(thenPromise, x, resolve, reject), err => reject(err))
       } catch(err) {
         reject(err)
       }

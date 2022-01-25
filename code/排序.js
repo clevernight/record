@@ -119,3 +119,30 @@ const heap = (arr) => {
 const array = [2,23,5,12,5,16,-1,1,6,1,4,7,51,43,6,13,6,1]
 
 console.log(heap(array))
+
+
+
+
+// 版本号排序
+const sortVersion = list => {
+  return list.sort((a, b) => {
+    const al = a.split('.')
+    const bl = b.split('.')
+    let i = 0
+    while(true) {
+      if (al[i] === undefined || bl[i] === undefined) {
+        return al.length - bl.length
+      }
+      if (al[i] !== bl[i]) {
+        return al[i] - bl[i]
+      }
+      ++i
+    }
+  })
+}
+const versionList = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
+console.log(sortVersion(versionList))
+
+
+
+

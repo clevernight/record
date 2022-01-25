@@ -33,46 +33,6 @@ var p = myNew(Person, 'name', 2)
 
 
 
-// EventEmitter
-class EventEmitter {
-  constructor() {
-    this._eventMap = new Map()
-  }
-
-  on(name, cb) {
-    if (!this._eventMap.has(name)) {
-      this._eventMap.set(name, [])
-    }
-    this._eventMap.get(name).push(cb)
-  }
-
-  emit(name, data) {
-    if (this._eventMap.has(name)) {
-      this._eventMap.get(name).forEach(item => {
-        item(data)
-      })
-    }
-  }
-
-  remove(name, cb) {
-    if (this._eventMap.has(name)) {
-      const list = this._eventMap.get(name)
-      if (list.includes(cb)) {
-        list.splice(list.indexOf(cb), 1)
-      }
-    }
-  }
-}
-const eventEmitter = new EventEmitter()
-function cb(p) {
-  console.log(p)
-}
-eventEmitter.on('e', cb)
-eventEmitter.emit('e')
-
-
-
-
 // curry
 function addCurry(...args) {
   const allArgs = [...args]
@@ -87,3 +47,55 @@ function addCurry(...args) {
 }
 
 addCurry(2)
+
+
+
+
+// flat
+function objectFlatten(obj) {
+  const isObject = tar => typeof tar === 'object'
+  if (!isObject(obj)) {
+    return obj
+  }
+  const ans = {}
+  const deal = (tar, pre) => {
+    if (!isObject(tar)) {
+      ans[pre] = tar
+      return
+    }
+    if (Array.isArray(tar)) {
+      for (let i = 0; i < tar.length; ++i) {
+        deal(tar[i], `${pre}[${i}]`)
+      }
+      return
+    }
+    Object.getOwnPropertyNames(tar).concat(Object.getOwnPropertySymbols(tar)).forEach((key) => {
+      deal(tar[key], pre ? `${pre}.${key}` : `${key}`)
+    })
+  }
+  deal(obj, '')
+  return ans
+}
+const source = {
+  a: {
+    b: 1,
+    c: 2,
+    d: {e: 5}
+  },
+  b: [1, 3, {a: 2, b: 3}],
+  c: 3
+}
+console.log(objectFlatten(source))
+
+
+
+// is
+Object.myIs = function(a, b) {
+  if (a === b) {
+    return a !== 0 || 1/a === 1/b
+  }
+  return a !== a && b !== b
+}
+Object.myIs(1, 1)
+Object.myIs(0, -0)
+Object.myIs(NaN, NaN)
