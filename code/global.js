@@ -115,3 +115,39 @@ lru.put(4, 4)
 console.log(lru.get(1))
 console.log(lru.get(3))
 console.log(lru.get(4))
+
+
+
+
+
+
+// ajax
+function ajax({ url, type = 'get', data, dataType }) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          let res = xhr.responseText
+          if (dataType && dataType === 'json') {
+            res = JSON.parse(res)
+          }
+          resolve(res)
+        } else {
+          reject()
+        }
+      }
+    }
+    if (type.toLocaleLowerCase() === 'get' && data) {
+      url += '?' + data
+    }
+    xhr.open(type, url, true)
+    if (type.toLocaleLowerCase() === 'post' && data) {
+      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded;charset=UTF-8')
+      xhr.send(data)
+    } else {
+      xhr.send()
+    }
+  })
+}
+ajax({url:'https://www.baidu.com'}).then((res) => {console.log(res)}, (err)=>{console.log('e:', err)})
