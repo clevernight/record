@@ -75,21 +75,27 @@ const quick = (arr) => {
   const deal = (sl, sr) => {
     let left = sl
     let right = sr
-    const num = arr[left]
+    const base = arr[left]
     while (left < right) {
-      if (arr[left] > num) {
-        [arr[left], arr[right]] = [arr[right], arr[left]]
-        --right
-      } else if (arr[right] < num) {
-        [arr[left], arr[right]] = [arr[right], arr[left]]
-        ++left
-      } else {
+      while (left < right && arr[right] >= base) {
         --right
       }
+      while (left < right && arr[left] <= base) {
+        ++left
+      }
+      if (left < right) {
+        [arr[left], arr[right]] = [arr[right], arr[left]]
+      }
     }
-    arr[left] = num
-    sl < left - 1 && deal(sl, left - 1)
-    sr > left + 1 && deal(left + 1, sr)
+    if (left !== sl) {
+      [arr[left], arr[sl]] = [arr[sl], arr[left]]
+    }
+    if (sl < left - 1) {
+      deal(sl, left - 1)
+    }
+    if (sr > left + 1) {
+      deal(left + 1, sr)
+    }
   }
   deal(0, arr.length-1)
   return arr
@@ -118,7 +124,7 @@ const heap = (arr) => {
 
 const array = [2,23,5,12,5,16,-1,1,6,1,4,7,51,43,6,13,6,1]
 
-console.log(heap(array))
+console.log(quick([5,4,3,2]))
 
 
 
@@ -140,8 +146,8 @@ const sortVersion = list => {
     }
   })
 }
-const versionList = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
-console.log(sortVersion(versionList))
+// const versionList = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
+// console.log(sortVersion(versionList))
 
 
 
